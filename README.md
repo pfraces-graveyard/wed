@@ -27,11 +27,25 @@ example:
 
 ```json
 {
-  "codemirror": {
-    "autofocus": true
+  "keyMap": {
+    "Tab": "spaceIndent"
+  },
+  "editor": {
+    "autofocus": true,
+    "indentUnit": 4
   }
 }
 ```
+
+## Options
+
+*   `keyMap`
+
+    Map [Alt-] [Shift-] [Ctrl-] key with a command name
+
+*   `editor`
+
+    Pass configuration directly to the editor
 
 [1]: https://github.com/rogerwang/node-webkit
 [2]: https://github.com/dominictarr/rc

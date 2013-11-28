@@ -1,14 +1,15 @@
 {
-  "name": "editor",
-  "description": "node-webkit codemirror example",
+  "name": "wed",
+  "description": "web editor",
+  "version": "0.0.1",
+  "dependencies": {
+    "codemirror": "latest",
+    "rc": "latest"
+  },
   "private": "true",
   "main": "index.html",
   "window": {
     "frame": false,
     "toolbar": false
-  },
-  "dependencies": {
-    "codemirror": "latest",
-    "rc": "latest"
   }
 }
