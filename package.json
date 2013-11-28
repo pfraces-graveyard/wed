@@ -8,6 +8,7 @@
     "toolbar": false
   },
   "dependencies": {
-    "codemirror": "latest"
+    "codemirror": "latest",
+    "rc": "latest"
   }
 }

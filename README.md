@@ -18,4 +18,20 @@ From `wed/` folder
 
     nw .
 
+# Config
+
+**wed** uses [rc][2] which allows several config location, here is an
+example:
+
+**~/.wedrc**
+
+```json
+{
+  "codemirror": {
+    "autofocus": true
+  }
+}
+```
+
 [1]: https://github.com/rogerwang/node-webkit
+[2]: https://github.com/dominictarr/rc

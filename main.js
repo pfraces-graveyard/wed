@@ -1,5 +1,4 @@
-var editor = document.getElementById('editor');
+var config = require('rc')('wed');
 
-var cm = CodeMirror(editor, {
-  autofocus: true
-});
+var editor = document.getElementById('editor');
+var cm = CodeMirror(editor, config.codemirror);
