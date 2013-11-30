@@ -1,21 +1,36 @@
 var config = require('rc')('wed');
 
-var editor = document.getElementById('editor');
+// DOM helpers
 
-var commands = {
-  spaceIndent: function (cm) {
-    var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
-    cm.replaceSelection(spaces, "end", "+input");
-  }
+var el = document.getElementById.bind(document),
+    $ = document.querySelectorAll.bind(document);
+
+var div = function () {
+  var d = document.createElement('div');
+  return el('canvas').appendChild(d);
 };
 
-var editorConf = config.editor || {},
-    extraKeys = editorConf.extraKeys = editorConf.extraKeys || {},
-    km = config.keyMap || {};
+// available commands
 
+var commands = {};
 
-Object.keys(km).forEach(function (key) {
-  extraKeys[key] = commands[km[key]];
+commands.newEditor = function () {
+  var editor = div();
+  editor.className = 'editor';
+  CodeMirror(editor, config.editor);
+};
+
+commands.spaceIndent = function (cm) {
+  var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
+  cm.replaceSelection(spaces, "end", "+input");
+};
+
+// init
+
+config.editor.extraKeys = {};
+
+Object.keys(config.keyMap).forEach(function (key) {
+  config.editor.extraKeys[key] = commands[config.keyMap[key]];
 });
 
-var cm = CodeMirror(editor, editorConf);
+commands.newEditor();
