@@ -2,8 +2,7 @@ var config = require('rc')('wed');
 
 // DOM helpers
 
-var el = document.getElementById.bind(document),
-    $ = document.querySelectorAll.bind(document);
+var el = document.getElementById.bind(document);
 
 var div = function () {
   var d = document.createElement('div');
