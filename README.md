@@ -48,11 +48,23 @@ example:
 
 *   `keyMap`
 
-    Map [Alt-] [Shift-] [Ctrl-] key with a command name
+    Map [Alt-] [Shift-] [Ctrl-] key to a command name
 
 *   `editor`
 
     Pass configuration directly to the editor
 
+# Commands
+
+## newEditor
+
+Appends a `div.editor` into `div#canvas` with a new instance of
+[codemirror][3]
+
+## spaceIndent
+
+Adds indentation made of `config.editor.indentUnits` spaces
+
 [1]: https://github.com/rogerwang/node-webkit
 [2]: https://github.com/dominictarr/rc
+[3]: https://github.com/marijnh/codemirror
