@@ -32,7 +32,6 @@ example:
 ```json
 {
   "keyMap": {
-    "Ctrl-N": "newEditor",
     "Ctrl-C": "toggleShell",
     "Tab": "spaceIndent"
   },
