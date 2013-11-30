@@ -11,6 +11,8 @@ An editor for web developers
     git clone https://github.com/pfraces/wed
     cd wed
     npm install
+    bower install
+    ln -s bower_components src/vendor
 
 # Usage
 
@@ -23,16 +25,21 @@ From `wed/` folder
 **wed** uses [rc][2] which allows several config location, here is an
 example:
 
+    cp wedrc.example.json ~/.wedrc
+
 **~/.wedrc**
 
 ```json
 {
   "keyMap": {
+    "Ctrl-N": "newEditor",
+    "Ctrl-C": "toggleShell",
     "Tab": "spaceIndent"
   },
   "editor": {
     "autofocus": true,
-    "indentUnit": 4
+    "indentUnit": 4,
+    "lineNumbers": true
   }
 }
 ```

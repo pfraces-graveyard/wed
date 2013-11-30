@@ -1,0 +1,12 @@
+{
+  "keyMap": {
+    "Ctrl-N": "newEditor",
+    "Ctrl-C": "toggleShell",
+    "Tab": "spaceIndent"
+  },
+  "editor": {
+    "autofocus": true,
+    "indentUnit": 4,
+    "lineNumbers": true
+  }
+}

@@ -20,12 +20,25 @@ commands.newEditor = function () {
   CodeMirror(editor, config.editor);
 };
 
+commands.toggleShell = (function () {
+  isActive = false;
+  return function () {
+    if (isActive) {
+      shell.deactivate();
+    } else {
+      shell.activate();
+    }
+
+    isActive = !isActive;
+  };
+})();
+
 commands.spaceIndent = function (cm) {
   var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
   cm.replaceSelection(spaces, "end", "+input");
 };
 
-// init
+// init codemirror
 
 config.editor.extraKeys = {};
 
@@ -34,3 +47,8 @@ Object.keys(config.keyMap).forEach(function (key) {
 });
 
 commands.newEditor();
+
+// init josh
+
+var history = new Josh.History({ key: 'wed.history'}),
+    shell = Josh.Shell({history: history});

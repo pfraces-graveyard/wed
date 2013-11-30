@@ -1,13 +1,12 @@
 {
   "name": "wed",
   "description": "web editor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "dependencies": {
-    "codemirror": "latest",
     "rc": "latest"
   },
   "private": "true",
-  "main": "index.html",
+  "main": "src/index.html",
   "window": {
     "toolbar": false
   }

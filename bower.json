@@ -1,0 +1,21 @@
+{
+  "name": "wed",
+  "description": "web editor",
+  "version": "0.0.1",
+  "dependencies": {
+    "codemirror": "latest",
+    "zepto": "latest",
+    "underscore": "latest"
+  },
+  "homepage": "https://github.com/pfraces/wed",
+  "authors": [
+    "pau fraces <pfraces@gmail.com>"
+  ],
+  "keywords": [
+    "code",
+    "editor"
+  ],
+  "license": "MIT",
+  "main": "index.html",
+  "private": true
+}
