@@ -21,12 +21,24 @@ commands.newEditor = function () {
 };
 
 commands.toggleShell = (function () {
-  isActive = false;
+  var history = new Josh.History({ key: 'wed.history'}),
+      shell = Josh.Shell({ history: history }),
+      panel = el('shell-panel'),
+      isActive = false;
+
+  panel.style.display = 'none';
+
+  shell.onNewPrompt(function(callback) {
+      callback(">");
+  });
+
   return function () {
     if (isActive) {
       shell.deactivate();
+      panel.style.display = 'none';
     } else {
       shell.activate();
+      panel.style.display = 'inline';
     }
 
     isActive = !isActive;
@@ -38,17 +50,13 @@ commands.spaceIndent = function (cm) {
   cm.replaceSelection(spaces, "end", "+input");
 };
 
-// init codemirror
+// init
 
-config.editor.extraKeys = {};
+config.editor = config.editor || {};
+config.editor.extraKeys = config.editor.extraKeys || {};
 
 Object.keys(config.keyMap).forEach(function (key) {
   config.editor.extraKeys[key] = commands[config.keyMap[key]];
 });
 
 commands.newEditor();
-
-// init josh
-
-var history = new Josh.History({ key: 'wed.history'}),
-    shell = Josh.Shell({history: history});
