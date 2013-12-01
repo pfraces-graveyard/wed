@@ -30,12 +30,12 @@ var cfg = require('rc')('wed'),
   mix(cmds).in(CodeMirror.commands);
 
   // expose commands to the shell
-  var exposed = Object.keys(cmds);
+  var exposed = Object.keys(cfg.shell);
 
   exposed.forEach(function (cmdName) {
     shell.setCommandHandler(cmdName, {
       exec: function (cmd, args, callback) {
-        callback(cm.execCommand(cmdName));
+        callback(cm.execCommand(cfg.shell[cmdName]));
       }
     });
   });
