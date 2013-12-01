@@ -1,7 +1,7 @@
 {
   "name": "wed",
   "description": "web editor",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "dependencies": {
     "rc": "latest",
     "u.mix": "latest"
