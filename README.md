@@ -65,6 +65,10 @@ Key bindings for the editor
 This mode is available when the shell is open and prevents key events to
 fallthrough child keymaps
 
+### `shell`
+
+Command aliases exposed in the shell
+
 ### `editor`
 
 Pass configuration directly to the editor
