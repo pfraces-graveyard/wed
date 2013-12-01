@@ -1,35 +1,16 @@
-module.exports = function (config, $, codemirror, josh) {
-  var cmd = codemirror.commands;
+module.exports = function (keymap, shell, panel) {
+  var commands = {};
 
-  cmd['editor.new'] = function () {
-    var editor = $.div();
-    editor.className = 'editor';
-
-    var cm = codemirror(editor, config.editor);
-    cm.focus();
-    cm.addKeyMap(config.keyMap.editor);
-  };
-
-  cmd['shell.toggle'] = (function () {
-    var history = new josh.History({ key: 'wed.history'}),
-        shell = josh.Shell({ history: history }),
-        panel = $('shell-panel'),
-        isActive = false;
-
-    config.keyMap.shell.nofallthrough = true;
-    panel.style.display = 'none';
-
-    shell.onNewPrompt(function(callback) {
-        callback(">");
-    });
+  commands['shell.toggle'] = (function () {
+    var isActive = false;
 
     return function (cm) {
       if (isActive) {
-        cm.removeKeyMap(config.keyMap.shell);
+        cm.removeKeyMap(keymap.shell);
         shell.deactivate();
         panel.style.display = 'none';
       } else {
-        cm.addKeyMap(config.keyMap.shell);
+        cm.addKeyMap(keymap.shell);
         shell.activate();
         panel.style.display = 'inline';
       }
@@ -38,10 +19,10 @@ module.exports = function (config, $, codemirror, josh) {
     };
   })();
   
-  cmd['indent.useSpaces'] = function (cm) {
+  commands['indent.useSpaces'] = function (cm) {
     var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
     cm.replaceSelection(spaces, "end", "+input");
   };
 
-  return cmd;
+  return commands;
 };

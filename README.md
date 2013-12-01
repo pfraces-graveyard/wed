@@ -49,15 +49,15 @@ example:
 
 ## Options
 
-### keyMap
+### `keyMap`
 
 Map `[Shift-] [Ctrl-] [Alt-]` keys to a command name
 
-#### keyMap.editor
+#### `keyMap.editor`
 
 Key bindings for the editor
 
-#### keyMap.shell
+#### `keyMap.shell`
 
 This mode is available when the shell is open and prevents key events to
 fallthrough child keymaps
@@ -68,16 +68,16 @@ Pass configuration directly to the editor
 
 # Commands
 
-## editor.new
+## `editor.new`
 
 Appends a `div.editor` into `div#canvas` with a new instance of
 [codemirror][3]
 
-## indent.useSpaces
+## `indent.useSpaces`
 
 Adds indentation made of `config.editor.indentUnits` spaces
 
-## shell.toggle
+## `shell.toggle`
 
 Shows or hides the shell
 
