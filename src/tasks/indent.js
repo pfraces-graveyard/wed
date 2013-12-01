@@ -1,4 +1,4 @@
-module.exports = function () {
+module.exports = function (wed) {
   return {
     'indent.useSpaces': function (cm) {
       var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");

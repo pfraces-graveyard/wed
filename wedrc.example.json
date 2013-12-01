@@ -1,5 +1,16 @@
 {
-  "keyMap": {
+  "tasks": [
+    "indent",
+    "shell"
+  ],
+  "commands": [
+    "echo",
+    "file"
+  ],
+  "wrappers": {
+    "exit": "shell.toggle"
+  },
+  "keymap": {
     "editor": {
       "Ctrl-C": "shell.toggle",
       "Tab": "indent.useSpaces"
@@ -7,9 +18,6 @@
     "shell": {
       "Ctrl-C": "shell.toggle"
     }
-  },
-  "shell": {
-    "exit": "shell.toggle"
   },
   "editor": {
     "indentUnit": 4,

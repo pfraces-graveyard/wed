@@ -1,15 +1,15 @@
-module.exports = function (keymap, shell, panel) {
+module.exports = function (wed) {
   var isActive = false;
   return {
     'shell.toggle': function (cm) {
       if (isActive) {
-        cm.removeKeyMap(keymap.shell);
-        shell.deactivate();
-        panel.style.display = 'none';
+        cm.removeKeyMap(wed.keymap.shell);
+        wed.shell.deactivate();
+        wed.shellPanel.style.display = 'none';
       } else {
-        cm.addKeyMap(keymap.shell);
-        shell.activate();
-        panel.style.display = 'inline';
+        cm.addKeyMap(wed.keymap.shell);
+        wed.shell.activate();
+        wed.shellPanel.style.display = 'inline';
       }
 
       isActive = !isActive;

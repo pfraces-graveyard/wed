@@ -12,7 +12,7 @@ shell.onNewPrompt(function(callback) {
 });
     
 panel.style.display = 'none';
-cfg.keyMap.shell.nofallthrough = true;
+cfg.keymap.shell.nofallthrough = true;
 
 // init codemirror
 var editor = dom.div();
@@ -20,29 +20,36 @@ editor.className = 'editor';
 
 var cm = CodeMirror(editor, cfg.editor);
 cm.focus();
-cm.addKeyMap(cfg.keyMap.editor);
+cm.addKeyMap(cfg.keymap.editor);
 
 // init tasks
-mix(
-  require('./tasks/indent')(),
-  require('./tasks/shell')(cfg.keyMap, shell, panel)
-).in(CodeMirror.commands);
 
-// wrap tasks in commands as defined in config
-Object.keys(cfg.shell).forEach(function (task) {
-  shell.setCommandHandler(task, {
-    exec: function (cmd, args, callback) {
-      callback(cm.execCommand(cfg.shell[task]));
-    }
-  });
-});
+var wed = {
+  keymap: cfg.keymap,
+  shell: shell,
+  shellPanel: panel
+};
+
+mix.apply(null, cfg.tasks.map(function (task) {
+  return require('./tasks/' + task)(wed);
+})).in(CodeMirror.commands);
 
 // init commands
-var commands = mix(
-      require('./commands/echo')(cm),
-      require('./commands/file')(cm)
-    ).in();
+
+var commands = mix.apply(null, cfg.commands.map(function (command) {
+  return require('./commands/' + command)(cm);
+})).in();
 
 Object.keys(commands).forEach(function (cmdName) {
   shell.setCommandHandler(cmdName, commands[cmdName]);
+});
+
+// init wrappers
+
+Object.keys(cfg.wrappers).forEach(function (wrapper) {
+  shell.setCommandHandler(wrapper, {
+    exec: function (cmd, args, callback) {
+      callback(cm.execCommand(cfg.wrappers[wrapper]));
+    }
+  });
 });

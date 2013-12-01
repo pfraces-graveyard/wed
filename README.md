@@ -22,16 +22,28 @@ From `wed/` folder
 
 # Config
 
-**wed** uses [rc][2] which allows several config location, here is an
+**wed** uses [rc][2] which allows several config locations. You can use our
+example configuration as starting point
 example:
 
     cp wedrc.example.json ~/.wedrc
 
-**~/.wedrc**
+**wedrc.example.json**
 
 ```json
 {
-  "keyMap": {
+  "tasks": [
+    "indent",
+    "shell"
+  ],
+  "commands": [
+    "echo",
+    "file"
+  ],
+  "wrappers": {
+    "exit": "shell.toggle"
+  },
+  "keymap": {
     "editor": {
       "Ctrl-C": "shell.toggle",
       "Tab": "indent.useSpaces"
@@ -39,9 +51,6 @@ example:
     "shell": {
       "Ctrl-C": "shell.toggle"
     }
-  },
-  "shell": {
-    "exit": "shell.toggle"
   },
   "editor": {
     "indentUnit": 4,
@@ -52,22 +61,34 @@ example:
 
 ## Options
 
-### `keyMap`
+### `tasks`
 
-Map `[Shift-] [Ctrl-] [Alt-]` keys to a command name
+An array of tasks to be exposed in the editor.
 
-#### `keyMap.editor`
+Each task is a string with the task path to be used by `require`
 
-Key bindings for the editor
+### `commands`
 
-#### `keyMap.shell`
+An array of commands to be exposed in the shell.
 
-This mode is available when the shell is open and prevents key events to
-fallthrough child keymaps
+Each command is a string with the command path to be used by `require`
 
-### `shell`
+### `wrappers`
 
-Command aliases exposed in the shell
+A map of command aliases to task names
+
+### `keymap`
+
+A map of `[Shift-] [Ctrl-] [Alt-] keyName` keys to task names
+
+#### `keymap.editor`
+
+This keymap is enabled by default
+
+#### `keymap.shell`
+
+This keymap is enabled when the shell is open and prevents key events
+from being captured by the editor
 
 ### `editor`
 
@@ -103,11 +124,11 @@ Josh commands
 
 ### Builtin
 
-#### `open *<filename>*`
+#### `open <filename>`
 
 Loads the content of the specified file in the editor
 
-#### `save *<filename>*`
+#### `save <filename>`
 
 Stores the editor content in the specified file
 
@@ -119,7 +140,9 @@ Plugins are defined using [node.js][5] packaging system
 
 As stated in [issue #13][6]
 
-A *task* module constructor receives the dependencies needed and returns a commands object, which is a collection of named functions which receive a codemirror instance as unique argument
+A *task* module constructor receives the dependencies needed and returns a
+commands object, which is a collection of named functions which receive a
+codemirror instance as unique argument
 
 ```js
 module.exports = function (keymap, shell, panel) {
@@ -135,7 +158,8 @@ module.exports = function (keymap, shell, panel) {
 
 As stated in [issue #13][6]
 
-A *command* module constructor receives a codemirror instance and returns a task object, which is a collection of named Josh command objects
+A *command* module constructor receives a codemirror instance and returns
+a task object, which is a collection of named Josh command objects
 
 ```js
 module.exports = function (cm) {
