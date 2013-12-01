@@ -22,75 +22,93 @@ From `wed/` folder
 
 # Config
 
-**wed** uses [rc][2] which allows several config locations. You can use our
-example configuration as starting point
-example:
+**wed** uses [rc][2] which allows several config locations. You can use
+the provided example configuration file as a starting point
 
     cp wedrc.example.json ~/.wedrc
-
-**wedrc.example.json**
-
-```json
-{
-  "tasks": [
-    "indent",
-    "shell"
-  ],
-  "commands": [
-    "echo",
-    "file"
-  ],
-  "wrappers": {
-    "exit": "shell.toggle"
-  },
-  "keymap": {
-    "editor": {
-      "Ctrl-C": "shell.toggle",
-      "Tab": "indent.useSpaces"
-    },
-    "shell": {
-      "Ctrl-C": "shell.toggle"
-    }
-  },
-  "editor": {
-    "indentUnit": 4,
-    "lineNumbers": true
-  }
-}
-```
 
 ## Options
 
 ### `tasks`
 
+```json
+"tasks": [
+  "indent",
+  "shell"
+]
+```
+
 An array of tasks to be exposed in the editor.
 
-Each task is a string with the task path to be used by `require`
+Each task is a string with the task path to be used by `require`, relative
+to `tasks/` directory
 
 ### `commands`
 
+```json
+"commands": [
+  "echo",
+  "file"
+]
+```
+
 An array of commands to be exposed in the shell.
 
-Each command is a string with the command path to be used by `require`
+Each command is a string with the command path to be used by `require`,
+relative to `commands/` directory
 
 ### `wrappers`
+
+```json
+"wrappers": {
+  "exit": "shell.toggle"
+}
+```
 
 A map of command aliases to task names
 
 ### `keymap`
 
-A map of `[Shift-] [Ctrl-] [Alt-] keyName` keys to task names
+```json
+"keymap": {
+  "editor": { ... },
+  "shell": { ... }
+}
+```
+
+A collection of named keymaps each being a map of
+`[Shift-] [Ctrl-] [Alt-] keyName` keys to task names
 
 #### `keymap.editor`
+
+```json
+"editor": {
+  "Ctrl-C": "shell.toggle",
+  "Tab": "indent.useSpaces"
+}
+```
 
 This keymap is enabled by default
 
 #### `keymap.shell`
 
+```json
+"shell": {
+  "Ctrl-C": "shell.toggle"
+}
+```
+
 This keymap is enabled when the shell is open and prevents key events
 from being captured by the editor
 
 ### `editor`
+
+```json
+"editor": {
+  "indentUnit": 4,
+  "lineNumbers": true
+}
+```
 
 Pass configuration directly to the editor
 
