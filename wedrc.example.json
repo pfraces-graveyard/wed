@@ -1,10 +1,14 @@
 {
   "keyMap": {
-    "Ctrl-C": "toggleShell",
-    "Tab": "spaceIndent"
+    "editor": {
+      "Ctrl-C": "shell.toggle",
+      "Tab": "indent.useSpaces"
+    },
+    "shell": {
+      "Ctrl-C": "shell.toggle"
+    }
   },
   "editor": {
-    "autofocus": true,
     "indentUnit": 4,
     "lineNumbers": true
   }
