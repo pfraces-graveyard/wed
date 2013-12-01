@@ -32,10 +32,12 @@ the provided example configuration file as a starting point
 ### `tasks`
 
 ```json
-"tasks": [
-  "indent",
-  "shell"
-]
+{
+  "tasks": [
+    "indent",
+    "shell"
+  ]
+}
 ```
 
 An array of tasks to be exposed in the editor.
@@ -46,10 +48,12 @@ to `tasks/` directory
 ### `commands`
 
 ```json
-"commands": [
-  "echo",
-  "file"
-]
+{
+  "commands": [
+    "echo",
+    "file"
+  ]
+}
 ```
 
 An array of commands to be exposed in the shell.
@@ -60,8 +64,10 @@ relative to `commands/` directory
 ### `wrappers`
 
 ```json
-"wrappers": {
-  "exit": "shell.toggle"
+{
+  "wrappers": {
+    "exit": "shell.toggle"
+  }
 }
 ```
 
@@ -70,9 +76,11 @@ A map of command aliases to task names
 ### `keymap`
 
 ```json
-"keymap": {
-  "editor": { ... },
-  "shell": { ... }
+{
+  "keymap": {
+    "editor": { ... },
+    "shell": { ... }
+  }
 }
 ```
 
@@ -82,9 +90,13 @@ A collection of named keymaps each being a map of
 #### `keymap.editor`
 
 ```json
-"editor": {
-  "Ctrl-C": "shell.toggle",
-  "Tab": "indent.useSpaces"
+{
+  "keymap": {
+    "editor": {
+      "Ctrl-C": "shell.toggle",
+      "Tab": "indent.useSpaces"
+    }
+  }
 }
 ```
 
@@ -93,8 +105,12 @@ This keymap is enabled by default
 #### `keymap.shell`
 
 ```json
-"shell": {
-  "Ctrl-C": "shell.toggle"
+{
+  "keymap": {
+    "shell": {
+      "Ctrl-C": "shell.toggle"
+    }
+  }
 }
 ```
 
@@ -104,9 +120,11 @@ from being captured by the editor
 ### `editor`
 
 ```json
-"editor": {
-  "indentUnit": 4,
-  "lineNumbers": true
+{
+  "editor": {
+    "indentUnit": 4,
+    "lineNumbers": true
+  }
 }
 ```
 
