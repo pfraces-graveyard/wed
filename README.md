@@ -68,11 +68,6 @@ Pass configuration directly to the editor
 
 # Commands
 
-## `editor.new`
-
-Appends a `div.editor` into `div#canvas` with a new instance of
-[codemirror][3]
-
 ## `indent.useSpaces`
 
 Adds indentation made of `config.editor.indentUnits` spaces
@@ -83,4 +78,3 @@ Shows or hides the shell
 
 [1]: https://github.com/rogerwang/node-webkit
 [2]: https://github.com/dominictarr/rc
-[3]: https://github.com/marijnh/codemirror
