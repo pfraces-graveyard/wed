@@ -31,25 +31,15 @@ var wed = {
 };
 
 mix.apply(null, cfg.tasks.map(function (task) {
-  return require('./tasks/' + task)(wed);
+  return require('./plugins/tasks/' + task)(wed);
 })).in(CodeMirror.commands);
 
 // init commands
 
 var commands = mix.apply(null, cfg.commands.map(function (command) {
-  return require('./commands/' + command)(cm);
+  return require('./plugins/commands/' + command)(cm);
 })).in();
 
 Object.keys(commands).forEach(function (cmdName) {
   shell.setCommandHandler(cmdName, commands[cmdName]);
-});
-
-// init wrappers
-
-Object.keys(cfg.wrappers).forEach(function (wrapper) {
-  shell.setCommandHandler(wrapper, {
-    exec: function (cmd, args, callback) {
-      callback(cm.execCommand(cfg.wrappers[wrapper]));
-    }
-  });
 });

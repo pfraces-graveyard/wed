@@ -34,8 +34,8 @@ the provided example configuration file as a starting point
 ```json
 {
   "tasks": [
-    "indent",
-    "shell"
+    "tabsToSpaces",
+    "toggleShell"
   ]
 }
 ```
@@ -43,7 +43,7 @@ the provided example configuration file as a starting point
 An array of tasks to be exposed in the editor.
 
 Each task is a string with the task path to be used by `require`, relative
-to `tasks/` directory
+to `plugins/tasks/` directory
 
 ### `commands`
 
@@ -51,7 +51,9 @@ to `tasks/` directory
 {
   "commands": [
     "echo",
-    "file"
+    "cat",
+    "open",
+    "save"
   ]
 }
 ```
@@ -59,19 +61,7 @@ to `tasks/` directory
 An array of commands to be exposed in the shell.
 
 Each command is a string with the command path to be used by `require`,
-relative to `commands/` directory
-
-### `wrappers`
-
-```json
-{
-  "wrappers": {
-    "exit": "shell.toggle"
-  }
-}
-```
-
-A map of command aliases to task names
+relative to `plugins/commands/` directory
 
 ### `keymap`
 
@@ -146,11 +136,11 @@ CodeMirror commands, shared between all CodeMirror instances
 
 ### Builtin
 
-#### `indent.useSpaces`
+#### `tabsToSpaces`
 
 Adds indentation made of `config.editor.indentUnits` spaces
 
-#### `shell.toggle`
+#### `toggleShell`
 
 Shows or hides the shell
 
@@ -168,6 +158,14 @@ Loads the content of the specified file in the editor
 
 Stores the editor content in the specified file
 
+#### `cat <filename>`
+
+Shows the content of the specified file in the shell
+
+#### `echo`
+
+Outputs its arguments
+
 # Defining plugins
 
 Plugins are defined using [node.js][5] packaging system
@@ -183,7 +181,7 @@ codemirror instance as unique argument
 ```js
 module.exports = function (keymap, shell, panel) {
     return {
-        'shell.toggle': function (cm) {
+        'toggleShell': function (cm) {
             ...
         }
     };
@@ -200,7 +198,7 @@ a task object, which is a collection of named Josh command objects
 ```js
 module.exports = function (cm) {
     return {
-        'file.open': {
+        'open': {
             exec: function (cmd, args, callback) {
                 ...
             },

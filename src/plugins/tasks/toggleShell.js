@@ -1,7 +1,8 @@
 module.exports = function (wed) {
   var isActive = false;
+
   return {
-    'shell.toggle': function (cm) {
+    toggleShell: function (cm) {
       if (isActive) {
         cm.removeKeyMap(wed.keymap.shell);
         wed.shell.deactivate();

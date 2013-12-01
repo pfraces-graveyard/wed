@@ -1,22 +1,19 @@
 {
   "tasks": [
-    "indent",
-    "shell"
+    "tabsToSpaces",
+    "toggleShell"
   ],
   "commands": [
-    "echo",
-    "file"
+    "open",
+    "save"
   ],
-  "wrappers": {
-    "exit": "shell.toggle"
-  },
   "keymap": {
     "editor": {
-      "Ctrl-C": "shell.toggle",
-      "Tab": "indent.useSpaces"
+      "Ctrl-C": "toggleShell",
+      "Tab": "tabsToSpaces"
     },
     "shell": {
-      "Ctrl-C": "shell.toggle"
+      "Ctrl-C": "toggleShell"
     }
   },
   "editor": {
