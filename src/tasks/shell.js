@@ -1,10 +1,7 @@
 module.exports = function (keymap, shell, panel) {
-  var commands = {};
-
-  commands['shell.toggle'] = (function () {
-    var isActive = false;
-
-    return function (cm) {
+  var isActive = false;
+  return {
+    'shell.toggle': function (cm) {
       if (isActive) {
         cm.removeKeyMap(keymap.shell);
         shell.deactivate();
@@ -16,13 +13,6 @@ module.exports = function (keymap, shell, panel) {
       }
 
       isActive = !isActive;
-    };
-  })();
-  
-  commands['indent.useSpaces'] = function (cm) {
-    var spaces = Array(cm.getOption("indentUnit") + 1).join(" ");
-    cm.replaceSelection(spaces, "end", "+input");
+    }
   };
-
-  return commands;
 };

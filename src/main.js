@@ -1,42 +1,48 @@
 var cfg = require('rc')('wed'),
     mix = require('u.mix'),
-    dom = require('./dom')(document),
-    commands = require('./commands');
+    dom = require('./dom')(document);
 
-(function () {
+// init josh
+var history = new Josh.History({ key: 'wed.history'}),
+    shell = Josh.Shell({ history: history }),
+    panel = dom('shell-panel');
 
-  // init josh
-  var history = new Josh.History({ key: 'wed.history'}),
-      shell = Josh.Shell({ history: history }),
-      panel = dom('shell-panel');
+shell.onNewPrompt(function(callback) {
+    callback(">");
+});
+    
+panel.style.display = 'none';
+cfg.keyMap.shell.nofallthrough = true;
 
-  shell.onNewPrompt(function(callback) {
-      callback(">");
+// init codemirror
+var editor = dom.div();
+editor.className = 'editor';
+
+var cm = CodeMirror(editor, cfg.editor);
+cm.focus();
+cm.addKeyMap(cfg.keyMap.editor);
+
+// init tasks
+mix(
+  require('./tasks/indent')(),
+  require('./tasks/shell')(cfg.keyMap, shell, panel)
+).in(CodeMirror.commands);
+
+// wrap tasks in commands as defined in config
+Object.keys(cfg.shell).forEach(function (task) {
+  shell.setCommandHandler(task, {
+    exec: function (cmd, args, callback) {
+      callback(cm.execCommand(cfg.shell[task]));
+    }
   });
-      
-  panel.style.display = 'none';
-  cfg.keyMap.shell.nofallthrough = true;
+});
 
-  // init codemirror
-  var editor = dom.div();
-  editor.className = 'editor';
+// init commands
+var commands = mix(
+      require('./commands/echo')(cm),
+      require('./commands/file')(cm)
+    ).in();
 
-  var cm = CodeMirror(editor, cfg.editor);
-  cm.focus();
-  cm.addKeyMap(cfg.keyMap.editor);
-
-  // init commands
-  var cmds = commands(cfg.keyMap, shell, panel);
-  mix(cmds).in(CodeMirror.commands);
-
-  // expose commands to the shell
-  var exposed = Object.keys(cfg.shell);
-
-  exposed.forEach(function (cmdName) {
-    shell.setCommandHandler(cmdName, {
-      exec: function (cmd, args, callback) {
-        callback(cm.execCommand(cfg.shell[cmdName]));
-      }
-    });
-  });
-})();
+Object.keys(commands).forEach(function (cmdName) {
+  shell.setCommandHandler(cmdName, commands[cmdName]);
+});
