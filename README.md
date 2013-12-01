@@ -40,6 +40,9 @@ example:
       "Ctrl-C": "shell.toggle"
     }
   },
+  "shell": {
+    "exit": "shell.toggle"
+  },
   "editor": {
     "indentUnit": 4,
     "lineNumbers": true
