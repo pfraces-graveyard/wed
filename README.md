@@ -205,8 +205,6 @@ module.exports = function (wed) {
 
 ## Command definition
 
-As stated in [issue #13][6]
-
 A *command* module constructor receives a `wed` object and returns
 a task object, which is a collection of named Josh command objects
 
