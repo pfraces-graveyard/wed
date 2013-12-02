@@ -1,8 +1,8 @@
 var cfg = require('rc')('wed'),
     mix = require('u.mix'),
-    dom = require('./dom')(document),
-    path = require('./path'),
-    tree = require('./tree');
+    dom = require('./lib/dom')(document),
+    path = require('./lib/path'),
+    tree = require('./lib/tree');
 
 // init josh
 
