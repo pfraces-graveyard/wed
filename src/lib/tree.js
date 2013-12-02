@@ -1,37 +1,40 @@
 module.exports = function (_) {
   var fakeFs = {
-    bin: {},
-    boot: {},
-    dev: {},
-    etc: {
-      default: {},
-      'rc.d': {},
-      sysconfig: {},
-      x11: {}
-    },
-    home: {
-      bob: {
-        video: {
-          'firefly.m4v': {}
+    'README.md': {},
+    'bower.json': {},
+    'package.json': {},
+    'src': {
+      'index.html': {},
+      'lib': {
+        'dom.js': {},
+        'josh': {
+          'LICENSE': {},
+          'README.md': {},
+          'history.js': {},
+          'killring.js': {},
+          'pathhandler.js': {},
+          'readline.js': {},
+          'shell.js': {}
         },
-        videos: {
-          'Arrested Development': {
-            's1e1.m4v': {}
-          },
-          'Better Off Ted': {
-            's1e1.m4v': {}
-          }
+        'path.js': {},
+        'tree.js': {}
+      },
+      'main.js': {},
+      'plugins': {
+        'commands': {
+          'cat.js': {},
+          'echo.js': {},
+          'open.js': {},
+          'save.js': {}
+        },
+        'tasks': {
+          'tabsToSpaces.js': {},
+          'toggleShell.js': {}
         }
       },
-      jane: {}
+      'style.css': {}
     },
-    lib: {},
-    'lost+found': {},
-    misc: {},
-    mnt: {
-      cdrom: {},
-      sysimage: {}
-    }
+    'wedrc.example.json': {}
   };
 
   var build = function (parent, node) {
