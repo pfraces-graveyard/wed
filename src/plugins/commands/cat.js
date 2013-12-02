@@ -1,6 +1,6 @@
 var fs = require('fs');
 
-module.exports = function (cm) {
+module.exports = function (wed) {
   return {
     cat: {
       exec: function (cmd, args, callback) {
@@ -11,7 +11,8 @@ module.exports = function (cm) {
         });
 
         callback(buffer);
-      }
+      },
+      completion: wed.pathHandler.pathCompletion
     }
   };
 };

@@ -1,4 +1,4 @@
-module.exports = function (cm) {
+module.exports = function () {
   return {
     echo: {
       exec: function (cmd, args, callback) {
