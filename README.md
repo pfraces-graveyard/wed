@@ -154,6 +154,17 @@ Josh commands
 
 Loads the content of the specified file in the editor
 
+Autodetects file content by extension and loads the appropiate CodeMirror
+syntax highlighter (called **mode** by CodeMirror)
+
+Builtin supported modes:
+
+*   html
+*   css
+*   js
+
+References: [htmlmixed mode][7], [switching modes][8]
+
 #### `save <filename>`
 
 Stores the editor content in the specified file
@@ -229,3 +240,5 @@ module.exports = function (wed) {
 [4]: https://github.com/sdether/josh.js
 [5]: https://github.com/joyent/node
 [6]: https://github.com/pfraces/wed/issues/13
+[7]: http://codemirror.net/mode/htmlmixed/index.html
+[8]: http://codemirror.net/demo/changemode.html
