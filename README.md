@@ -170,16 +170,31 @@ Outputs its arguments
 
 Plugins are defined using [node.js][5] packaging system
 
+[API discussion here][6]
+
+Plugins receive a `wed` object which is a collection of useful
+dependencies defined in `src/main.js`
+
+```js
+// plugin dependency injection
+
+var wed = {
+  cm: cm,             // CodeMirror instance
+  shell: shell,       // Josh instance
+  path: pathhandler,  // Josh pathhandler
+  shellPanel: panel,  // Josh DOM element
+  keymap: cfg.keymap  // user defined keymaps
+};
+```
+
 ## Task definition
 
-As stated in [issue #13][6]
-
-A *task* module constructor receives the dependencies needed and returns a
+A *task* module constructor receives a `wed` object and returns a
 commands object, which is a collection of named functions which receive a
 codemirror instance as unique argument
 
 ```js
-module.exports = function (keymap, shell, panel) {
+module.exports = function (wed) {
     return {
         'toggleShell': function (cm) {
             ...
@@ -192,17 +207,18 @@ module.exports = function (keymap, shell, panel) {
 
 As stated in [issue #13][6]
 
-A *command* module constructor receives a codemirror instance and returns
+A *command* module constructor receives a `wed` object and returns
 a task object, which is a collection of named Josh command objects
 
 ```js
-module.exports = function (cm) {
+module.exports = function (wed) {
     return {
         'open': {
             exec: function (cmd, args, callback) {
                 ...
             },
             complete: function (cmd, arg, line, callback) {
+                ...
             }
         }
     };

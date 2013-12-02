@@ -35,11 +35,11 @@ cm.addKeyMap(cfg.keymap.editor);
 // plugin dependency injection
 
 var wed = {
-  keymap: cfg.keymap,
-  shell: shell,
-  path: pathhandler,
-  shellPanel: panel,
-  cm: cm
+  cm: cm,             // CodeMirror instance
+  shell: shell,       // Josh instance
+  path: pathhandler,  // Josh pathhandler
+  shellPanel: panel,  // Josh DOM element
+  keymap: cfg.keymap  // user defined keymaps
 };
 
 // init task plugins
