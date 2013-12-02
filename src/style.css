@@ -9,8 +9,9 @@ body {
 
 .statusbar {
   position: fixed;
-  bottom: 0;
+  z-index: 4;
   width: 100%;
+  bottom: 0;
   box-shadow: 0 0 0.5em black;
   padding: 0.3em;
   background-color: black;
