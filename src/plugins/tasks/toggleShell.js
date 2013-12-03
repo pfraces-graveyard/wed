@@ -1,16 +1,19 @@
 module.exports = function (wed) {
-  var isActive = false;
+  var isActive = false,
+      panel = wed.lib.dom('shell-panel'),
+      shell = wed.josh.shell,
+      km = wed.config.keymap;
 
   return {
     toggleShell: function (cm) {
       if (isActive) {
-        cm.removeKeyMap(wed.keymap.shell);
-        wed.shell.deactivate();
-        wed.shellPanel.style.display = 'none';
+        cm.removeKeyMap(km.shell);
+        shell.deactivate();
+        panel.style.display = 'none';
       } else {
-        cm.addKeyMap(wed.keymap.shell);
-        wed.shell.activate();
-        wed.shellPanel.style.display = 'inline';
+        cm.addKeyMap(km.shell);
+        shell.activate();
+        panel.style.display = 'inline';
       }
 
       isActive = !isActive;

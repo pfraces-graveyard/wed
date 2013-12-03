@@ -1,4 +1,6 @@
-module.exports = function (document) {
+module.exports = function (deps) {
+  var document = deps.document;
+
   var dom = document.getElementById.bind(document);
 
   dom.div = function () {

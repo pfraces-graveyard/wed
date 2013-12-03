@@ -1,4 +1,6 @@
-module.exports = function (_, pathhandler) {
+module.exports = function (deps) {
+  var _ = deps._;
+
   var findNode = function (current, parts, callback) {
     if(!parts || parts.length == 0) {
       return callback(current);
@@ -18,20 +20,28 @@ module.exports = function (_, pathhandler) {
     return findNode(current, _.rest(parts), callback);
   };
 
-  pathhandler.getNode = function (path, callback) {
+  var getNode = function (path, callback) {
     if(!path) {
-      return callback(pathhandler.current);
+      return callback(this.current);
     }
 
     var parts = _.filter(path.split('/'), function (x) {
       return x;
     });
 
-    var start = ((path || '')[0] == '/') ? treeroot : pathhandler.current;
+    var start = ((path || '')[0] == '/') ?
+                treeroot :
+                this.current;
+    
     return findNode(start, parts, callback);
   };
 
-  pathhandler.getChildNodes = function (node, callback) {
+  var getChildNodes = function (node, callback) {
     callback(node.childnodes);
+  };
+
+  return {
+    getNode: getNode,
+    getChildNodes: getChildNodes
   };
 };

@@ -1,6 +1,8 @@
 var fs = require('fs');
 
 module.exports = function (wed) {
+  var fsCompletion = wed.josh.completions.fs;
+
   return {
     cat: {
       exec: function (cmd, args, callback) {
@@ -12,7 +14,7 @@ module.exports = function (wed) {
 
         callback(buffer);
       },
-      completion: wed.pathHandler.pathCompletion
+      completion: fsCompletion
     }
   };
 };

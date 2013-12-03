@@ -1,7 +1,8 @@
 {
   "tasks": [
     "tabsToSpaces",
-    "toggleShell"
+    "toggleShell",
+    "debug"
   ],
   "commands": [
     "open",
@@ -10,7 +11,8 @@
   "keymap": {
     "editor": {
       "Ctrl-C": "toggleShell",
-      "Tab": "tabsToSpaces"
+      "Tab": "tabsToSpaces",
+      "Ctrl-D": "debug"
     },
     "shell": {
       "Ctrl-C": "toggleShell"

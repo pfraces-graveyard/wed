@@ -1,8 +1,16 @@
-var cfg = require('rc')('wed'),
+var gui = require('nw.gui'),
+    config = require('rc')('wed'),
     mix = require('u.mix'),
-    dom = require('./lib/dom')(document),
-    path = require('./lib/path'),
-    tree = require('./lib/tree');
+    Lib = require('./lib/lib');
+
+var lib = Lib({
+  document: document,
+  _: _
+});
+
+var dom = lib.dom,
+    fsPathHandler = lib.fs.path,
+    fsTree = lib.fs.tree;
 
 // init josh
 
@@ -15,42 +23,46 @@ shell.onNewPrompt(function(callback) {
 });
     
 panel.style.display = 'none';
-cfg.keymap.shell.nofallthrough = true;
+config.keymap.shell.nofallthrough = true;
 
 // init path handler
 
-var pathhandler = new Josh.PathHandler(shell);
-pathhandler.current = tree(_);
-path(_, pathhandler);
+var pathhandler = mix(fsPathHandler, { current: fsTree })
+		.in(new Josh.PathHandler(shell));
 
 // init codemirror
 
 var editor = dom.div();
 editor.className = 'editor';
 
-var cm = CodeMirror(editor, cfg.editor);
+var cm = CodeMirror(editor, config.editor);
 cm.focus();
-cm.addKeyMap(cfg.keymap.editor);
+cm.addKeyMap(config.keymap.editor);
 
 // plugin dependency injection
 
 var wed = {
-  cm: cm,             // CodeMirror instance
-  shell: shell,       // Josh instance
-  path: pathhandler,  // Josh pathhandler
-  shellPanel: panel,  // Josh DOM element
-  keymap: cfg.keymap  // user defined keymaps
+  gui: gui,
+  codemirror: cm,
+  josh: {
+    shell: shell,
+    completions: {
+      fs: pathhandler.pathCompletionHandler
+    }
+  },
+  lib: lib,
+  config: config
 };
 
 // init task plugins
 
-mix.apply(null, cfg.tasks.map(function (task) {
+mix.apply(null, config.tasks.map(function (task) {
   return require('./plugins/tasks/' + task)(wed);
 })).in(CodeMirror.commands);
 
 // init command plugins
 
-var commands = mix.apply(null, cfg.commands.map(function (command) {
+var commands = mix.apply(null, config.commands.map(function (command) {
   return require('./plugins/commands/' + command)(wed);
 })).in();
 
