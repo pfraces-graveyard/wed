@@ -35,7 +35,8 @@ the provided example configuration file as a starting point
 {
   "tasks": [
     "tabsToSpaces",
-    "toggleShell"
+    "toggleShell",
+    "debug"
   ]
 }
 ```
@@ -84,6 +85,7 @@ A collection of named keymaps each being a map of
   "keymap": {
     "editor": {
       "Ctrl-C": "shell.toggle",
+      "Ctrl-D: "debug",
       "Tab": "indent.useSpaces"
     }
   }
@@ -187,14 +189,17 @@ Plugins receive a `wed` object which is a collection of useful
 dependencies defined in `src/main.js`
 
 ```js
-// plugin dependency injection
-
 var wed = {
-  cm: cm,             // CodeMirror instance
-  shell: shell,       // Josh instance
-  path: pathhandler,  // Josh pathhandler
-  shellPanel: panel,  // Josh DOM element
-  keymap: cfg.keymap  // user defined keymaps
+  gui: gui,
+  codemirror: cm,
+  josh: {
+    shell: shell,
+    completions: {
+      fs: pathhandler.pathCompletionHandler
+    }
+  },
+  lib: lib,
+  config: config
 };
 ```
 
@@ -207,7 +212,7 @@ codemirror instance as unique argument
 ```js
 module.exports = function (wed) {
     return {
-        'toggleShell': function (cm) {
+        'taskName': function (cm) {
             ...
         }
     };
@@ -222,7 +227,7 @@ a task object, which is a collection of named Josh command objects
 ```js
 module.exports = function (wed) {
     return {
-        'open': {
+        'commandName': {
             exec: function (cmd, args, callback) {
                 ...
             },
