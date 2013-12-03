@@ -14,6 +14,17 @@ module.exports = function (deps) {
    *   the rest of the parts (bar) and the current branch of the tree
    *   (tree[foo]) and so on
    *
+   *   reference: http://sdether.github.io/josh.js/docs/example.html
+   *
+   *   `findNode` is called recursively from `getNode` with the current
+   *   node and remaining path already split into segments. It then simply
+   *   resolves the node for the next segment in `parts` to a node,
+   *   including relative references like `.` and `..`.
+   *
+   *   In implementations that let you explore an hierarchy on a server,
+   *   this function would live on the server side and be called remotely
+   *   via getNode.
+   *
    * > current:  current traversed node
    * > parts: array of path tokens left
    * > callback: called on each node with the node
@@ -96,11 +107,21 @@ module.exports = function (deps) {
    *
    * ? Required by the path handler
    *
+   *   reference: http://sdether.github.io/josh.js/docs/example.html
+   *
+   *   `getNode` gets called with path string. This string is completely
+   *   opaque to `PathHandler`, i.e. constructs such as `.` and `..` are an
+   *   implementation detail. `PathHandler` does assume that the path
+   *   separator is `/`.
+   *
+   *   `getNode` is called anytime the pathhandler has a path and need to
+   *   determine what if any node exists at that path which happens during
+   *   path completion as well as `cd` and `ls` execution.
+   *
    * > path
    * > callback
    */
   var getNode = function (path, callback) {
-    console.log(path);
     if(!path) {
       return callback(this.current);
     }
@@ -126,6 +147,18 @@ module.exports = function (deps) {
    * getChildNodes()
    *
    * ? Required by the path handler
+   *
+   *   reference: http://sdether.github.io/josh.js/docs/example.html
+   *
+   *   `getChildNodes` is used by path completion to determine the possible
+   *   completion candidates. Path completion first determines the node for
+   *   the given path, looking for the nearest `/` in case if the given
+   *   path does not return a node via `getNode`.
+   *
+   *   For our example, we've attached the child node objects directly to
+   *   the node object, so we can simply return it. Usually this would be
+   *   used to call the server with the provided node's path or id so that
+   *   the appropriate children can be found.
    *
    * > node
    * > callback
