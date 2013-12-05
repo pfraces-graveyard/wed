@@ -13,6 +13,7 @@ An editor for web developers
     npm install
     bower install
     ln -s bower_components src/vendor
+    ln -s start.sh ~/bin/wed
 
 # Usage
 
