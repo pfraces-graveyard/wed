@@ -90,16 +90,10 @@ var Josh = Josh || {};
           return completeChildren(node, '', callback);
         });
       }
-      var partial = "";
       var lastPathSeparator = arg.lastIndexOf("/");
       var parent = arg.substr(0, lastPathSeparator + 1);
-      partial = arg.substr(lastPathSeparator + 1);
-      if(partial === '..' || partial === '.') {
-        return callback({
-          completion: '/',
-          suggestions: []
-        });
-      }
+      var partial = arg.substr(lastPathSeparator + 1);
+
       _console.log("completing children via parent '" + parent+"'  w/ partial '"+partial+"'");
       return self.getNode(parent, function(node) {
         if(!node) {
@@ -107,12 +101,6 @@ var Josh = Josh || {};
           return callback();
         }
         return completeChildren(node, partial, function(completion) {
-          if(completion && completion.completion == '' && completion.suggestions.length == 1) {
-            return callback({
-              completion: '/',
-              suggestions: []
-            });
-          }
           return callback(completion);
         });
       });
@@ -121,7 +109,13 @@ var Josh = Josh || {};
     function completeChildren(node, partial, callback) {
       self.getChildNodes(node, function(childNodes) {
         callback(_shell.bestMatch(partial, _.map(childNodes, function(x) {
-          return x.name;
+          var name = x.name;
+
+          if (x.children.length) {
+            name += '/';
+          }
+
+          return name;
         })));
       });
     }
