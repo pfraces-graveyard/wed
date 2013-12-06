@@ -6,10 +6,11 @@ module.exports = function (wed) {
   return {
     cat: {
       exec: function (cmd, args, callback) {
-        var buffer = '';
+        var pwd = process.env.PWD + '/',
+            buffer = '';
 
         args.forEach(function (arg) {
-          buffer += fs.readFileSync(arg);
+          buffer += fs.readFileSync(pwd + arg);
         });
 
         callback(buffer);

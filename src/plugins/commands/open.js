@@ -8,9 +8,9 @@ module.exports = function (wed) {
   return {
     open: {
       exec: function (cmd, args, callback) {
-        var filePath = args[0],
-            content = fs.readFileSync(filePath, { encoding: 'utf8' }),
-            mode = fsMode(filePath);
+        var path = process.env.PWD + '/' + args[0],
+            content = fs.readFileSync(path, { encoding: 'utf8' }),
+            mode = fsMode(path);
 
         cm.setValue(content);
         cm.setOption('mode', mode);

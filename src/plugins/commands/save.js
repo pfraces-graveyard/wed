@@ -7,8 +7,10 @@ module.exports = function (wed) {
   return {
     save: {
       exec: function (cmd, args, callback) {
-        var content = cm.getValue();
-        fs.writeFileSync(args[0], content);
+        var path = process.env.PWD + '/' + args[0],
+            content = cm.getValue();
+
+        fs.writeFileSync(path, content);
         callback();
       },
       completion: fsCompletion
