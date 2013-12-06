@@ -4,7 +4,8 @@
   "version": "0.1.1",
   "dependencies": {
     "rc": "latest",
-    "u.mix": "latest"
+    "u.mix": "latest",
+    "async": "latest"
   },
   "private": "true",
   "main": "src/index.html",

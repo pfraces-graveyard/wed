@@ -3,8 +3,7 @@ module.exports = function (deps) {
     dom:    require('./dom')(deps),
     fs: {
       mode: require('./fs/mode')(deps),
-      path: require('./fs/path')(deps),
-      tree: require('./fs/tree')(deps)
+      path: require('./fs/path')(deps)
     }
   };
 };

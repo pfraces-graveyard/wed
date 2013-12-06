@@ -27,7 +27,7 @@ config.keymap.shell.nofallthrough = true;
 
 // init path handler
 
-var pathhandler = mix(fsPathHandler, { current: fsTree })
+var pathhandler = mix(fsPathHandler, { current: { path: '/' } })
 		.in(new Josh.PathHandler(shell));
 
 // init codemirror

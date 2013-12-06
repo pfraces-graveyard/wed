@@ -111,7 +111,7 @@ var Josh = Josh || {};
         callback(_shell.bestMatch(partial, _.map(childNodes, function(x) {
           var name = x.name;
 
-          if (x.children.length) {
+          if (x.isDirectory()) {
             name += '/';
           }
 
@@ -125,6 +125,8 @@ var Josh = Josh || {};
         if(!node) {
           return callback(_shell.templates.not_found({cmd: 'cd', path: args[0]}));
         }
+
+        node.path = node.name;
         self.current = node;
         return callback();
       });
