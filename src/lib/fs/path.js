@@ -39,7 +39,7 @@ module.exports = function (deps) {
 
     fs.stat(process.env.PWD + abs, function (err, stat) {
       if (err) {
-        callback();
+        return callback();
       }
 
       if (stat.isDirectory() && abs[abs.length - 1] !== '/') {
