@@ -10,7 +10,7 @@ module.exports = function (wed) {
   return {
     save: {
       exec: function (cmd, args, callback) {
-        var current = pathHandler.current.name || '',
+        var current = pathHandler.current.path,
             pwd = root + current;
 
         var arg = args[0],

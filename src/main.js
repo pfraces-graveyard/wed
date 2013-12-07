@@ -23,7 +23,19 @@ config.keymap.shell.nofallthrough = true;
 
 // init path handler
 
-var pathHandler = mix(fsPathHandler, { current: { path: '/' } })
+/**
+ * An initial node resolves lots of problems and checks in path handling
+ * functions getNode() and getChildNodes() as in the prompt handler
+ * defined below
+ */
+var root = {
+  current: {
+    path: '/',
+    name: ''
+  }
+};
+
+var pathHandler = mix(fsPathHandler, root)
 		.in(new Josh.PathHandler(shell));
 
 // init prompt
@@ -68,5 +80,8 @@ var commands = mix.apply(null, config.commands.map(function (command) {
 })).in();
 
 Object.keys(commands).forEach(function (cmdName) {
-  shell.setCommandHandler(cmdName, commands[cmdName]);
+  shell.setCommandHandler(cmdName, {
+      exec: commands[cmdName].exec,
+      completion: commands[cmdName].completion
+  });
 });

@@ -124,7 +124,6 @@ var Josh = Josh || {};
           return callback(_shell.templates.not_found({cmd: 'cd', path: args[0]}));
         }
 
-        node.path = node.name;
         self.current = node;
         return callback();
       });

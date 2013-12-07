@@ -9,7 +9,7 @@ module.exports = function (wed) {
   return {
     cat: {
       exec: function (cmd, args, callback) {
-        var current = pathHandler.current.name || '',
+        var current = pathHandler.current.path,
             pwd = root + current;
 
         var buffer = '';
