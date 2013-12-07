@@ -60,10 +60,13 @@ cm.addKeyMap(config.keymap.editor);
 var args = gui.App.argv;
 
 if (args.length) {
-  var path = args[0],
+  var arg = args[0],
+      start = arg[0] === '/' ? '' : process.env.PWD,
+      path = start + '/' + arg,
+      content = fs.readFileSync(path, { encoding: 'utf8' }),
       mode = fsMode(path);
 
-  cm.setValue(fs.readFileSync(path, { encoding: 'utf8' }));
+  cm.setValue(content);
   cm.setOption('mode', mode);
 }
 
