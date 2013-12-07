@@ -73,7 +73,8 @@ mix.apply(null, config.tasks.map(function (task) {
   return require('./plugins/tasks/' + task)(wed);
 })).in(CodeMirror.commands);
 
-// init command plugins
+// init command plugins and handle possible errors to prevent
+// prompt crashes (#25)
 
 var commands = mix.apply(null, config.commands.map(function (command) {
   return require('./plugins/commands/' + command)(wed);
@@ -81,7 +82,13 @@ var commands = mix.apply(null, config.commands.map(function (command) {
 
 Object.keys(commands).forEach(function (cmdName) {
   shell.setCommandHandler(cmdName, {
-      exec: commands[cmdName].exec,
+      exec: function (cmd, args, callback) {
+        try {
+          commands[cmdName].exec.apply(this, arguments);
+        } catch (e) {
+          callback(e);
+        }
+      },
       completion: commands[cmdName].completion
   });
 });
