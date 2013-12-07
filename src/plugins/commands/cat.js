@@ -1,21 +1,29 @@
 var fs = require('fs');
 
 module.exports = function (wed) {
-  var fsCompletion = wed.josh.completions.fs;
+  var pathHandler = wed.pathHandler;
+
+  var completion = pathHandler.pathCompletionHandler,
+      root = process.env.PWD;
 
   return {
     cat: {
       exec: function (cmd, args, callback) {
-        var pwd = process.env.PWD + '/',
-            buffer = '';
+        var current = pathHandler.current.name || '',
+            pwd = root + current;
+
+        var buffer = '';
 
         args.forEach(function (arg) {
-          buffer += fs.readFileSync(pwd + arg);
+          var start = arg[0] === '/' ? root : pwd,
+              path = start + arg;
+
+          buffer += fs.readFileSync(path);
         });
 
         callback(buffer);
       },
-      completion: fsCompletion
+      completion: completion
     }
   };
 };

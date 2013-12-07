@@ -13,13 +13,32 @@ An editor for web developers
     npm install
     bower install
     ln -s bower_components src/vendor
-    ln -s start.sh ~/bin/wed
 
 # Usage
 
 From `wed/` folder
 
     nw .
+
+A start script is also provided. You can call it from everywhere by
+linking it to some path in `$PATH`
+
+    ln -s /path/to/wed/start.sh ~/bin/wed
+
+In the previous example we have renamed the start script to `wed` so we
+can start using it
+
+Called without paramenters, `wed` launches the editor detached from the
+console
+
+    cd /path/to/a/project
+    wed
+
+A debug flag is supported which keeps the editor attached to the
+console and shows the node-webkit output
+
+    wed --debug
+
 
 # Config
 

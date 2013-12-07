@@ -1,8 +1,9 @@
 module.exports = function (wed) {
-  var isActive = false,
-      panel = wed.lib.dom('shell-panel'),
-      shell = wed.josh.shell,
+  var panel = wed.lib.dom('shell-panel'),
+      shell = wed.josh,
       km = wed.config.keymap;
+
+  var isActive = false;
 
   return {
     toggleShell: function (cm) {

@@ -121,6 +121,11 @@ var Josh = Josh || {};
     }
 
     function cd(cmd, args, callback) {
+      // when called without args redirect to root
+      if (!(args && args.length)) {
+        args = ['/'];
+      }
+
       self.getNode(args[0], function(node) {
         if(!node) {
           return callback(_shell.templates.not_found({cmd: 'cd', path: args[0]}));

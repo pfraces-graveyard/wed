@@ -27,7 +27,7 @@ config.keymap.shell.nofallthrough = true;
 
 // init path handler
 
-var pathhandler = mix(fsPathHandler, { current: { path: '/' } })
+var pathHandler = mix(fsPathHandler, { current: { path: '/' } })
 		.in(new Josh.PathHandler(shell));
 
 // init codemirror
@@ -44,12 +44,8 @@ cm.addKeyMap(config.keymap.editor);
 var wed = {
   gui: gui,
   codemirror: cm,
-  josh: {
-    shell: shell,
-    completions: {
-      fs: pathhandler.pathCompletionHandler
-    }
-  },
+  josh: shell,
+  pathHandler: pathHandler,
   lib: lib,
   config: config
 };

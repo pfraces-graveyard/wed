@@ -17,7 +17,7 @@ module.exports = function (deps) {
       return callback(this.current);
     }
 
-    var start = path[0] === '/' ? '' : (this.current.name || '');
+    var start = path[0] === '/' ? '' : (this.current.name || '') + '/';
     callback({ name: start + path });
   };
 
