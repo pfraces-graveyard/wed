@@ -1,7 +1,8 @@
 var gui = require('nw.gui'),
     config = require('rc')('wed'),
     mix = require('u.mix'),
-    Lib = require('./lib/lib');
+    Lib = require('./lib/lib'),
+    fs = require('fs');
 
 var lib = Lib({
   document: document,
@@ -9,10 +10,10 @@ var lib = Lib({
 });
 
 var dom = lib.dom,
-    fsPathHandler = lib.fs.path,
-    fsTree = lib.fs.tree;
+    fsPathHandler = lib.fs.pathHandler,
+    fsMode = lib.fs.mode;
 
-// init josh
+// # init josh
 
 var history = new Josh.History({ key: 'wed.history'}),
     shell = Josh.Shell({ history: history }),
@@ -21,7 +22,7 @@ var history = new Josh.History({ key: 'wed.history'}),
 panel.style.display = 'none';
 config.keymap.shell.nofallthrough = true;
 
-// init path handler
+// ## init path handler
 
 /**
  * An initial node resolves lots of problems and checks in path handling
@@ -29,16 +30,14 @@ config.keymap.shell.nofallthrough = true;
  * defined below
  */
 var root = {
-  current: {
-    path: '/',
-    name: ''
-  }
+  path: '/',
+  name: ''
 };
 
-var pathHandler = mix(fsPathHandler, root)
+var pathHandler = mix(fsPathHandler, { current: root })
 		.in(new Josh.PathHandler(shell));
 
-// init prompt
+// ## init prompt
 
 shell.onNewPrompt(function (callback) {
   var path = '/' + pathHandler.current.path
@@ -47,7 +46,7 @@ shell.onNewPrompt(function (callback) {
   callback(path + '>');
 });
 
-// init codemirror
+// # init codemirror
 
 var editor = dom.div();
 editor.className = 'editor';
@@ -56,7 +55,21 @@ var cm = CodeMirror(editor, config.editor);
 cm.focus();
 cm.addKeyMap(config.keymap.editor);
 
-// plugin dependency injection
+// ## open file from command line
+
+var args = gui.App.argv;
+
+if (args.length) {
+  var path = args[0],
+      mode = fsMode(path);
+
+  cm.setValue(fs.readFileSync(path, { encoding: 'utf8' }));
+  cm.setOption('mode', mode);
+}
+
+// # plugins
+
+// ## plugin dependency injection
 
 var wed = {
   gui: gui,
@@ -67,28 +80,30 @@ var wed = {
   config: config
 };
 
-// init task plugins
+// ## init task plugins
 
 mix.apply(null, config.tasks.map(function (task) {
   return require('./plugins/tasks/' + task)(wed);
 })).in(CodeMirror.commands);
 
-// init command plugins and handle possible errors to prevent
-// prompt crashes (#25)
+// ## init command plugins
 
 var commands = mix.apply(null, config.commands.map(function (command) {
   return require('./plugins/commands/' + command)(wed);
 })).in();
 
 Object.keys(commands).forEach(function (cmdName) {
+  var command = commands[cmdName];
+
+  // (#25) handle possible errors to prevent prompt crashes
   shell.setCommandHandler(cmdName, {
       exec: function (cmd, args, callback) {
         try {
-          commands[cmdName].exec.apply(this, arguments);
+          command.exec.apply(this, arguments);
         } catch (e) {
           callback(e);
         }
       },
-      completion: commands[cmdName].completion
+      completion: command.completion
   });
 });

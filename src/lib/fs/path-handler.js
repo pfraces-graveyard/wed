@@ -25,8 +25,6 @@ module.exports = function (deps) {
    * > callback: function (node)
    */
   var getNode = function (path, callback) {
-    console.log(this.current);
-    console.log(path);
     var current = this.current;
 
     if(!path) {
@@ -35,7 +33,6 @@ module.exports = function (deps) {
 
     var start = path[0] === '/' ? '' : current.path,
         abs = fsPath.normalize(start + path);
-    console.log(abs);
 
     fs.stat(process.env.PWD + abs, function (err, stat) {
       if (err) {
@@ -86,8 +83,6 @@ module.exports = function (deps) {
    * > callback: function ([node])
    */
   var getChildNodes = function (node, callback) {
-    console.log(this.current);
-    console.log(node);
     var path = process.env.PWD + node.path;
 
     fs.readdir(path, function (err, nodes) {
