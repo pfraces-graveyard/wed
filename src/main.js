@@ -17,10 +17,6 @@ var dom = lib.dom,
 var history = new Josh.History({ key: 'wed.history'}),
     shell = Josh.Shell({ history: history }),
     panel = dom('shell-panel');
-
-shell.onNewPrompt(function(callback) {
-    callback(">");
-});
     
 panel.style.display = 'none';
 config.keymap.shell.nofallthrough = true;
@@ -29,6 +25,15 @@ config.keymap.shell.nofallthrough = true;
 
 var pathHandler = mix(fsPathHandler, { current: { path: '/' } })
 		.in(new Josh.PathHandler(shell));
+
+// init prompt
+
+shell.onNewPrompt(function (callback) {
+  var path = '/' + pathHandler.current.path
+          .split('/').filter(Boolean).join('/');
+
+  callback(path + '>');
+});
 
 // init codemirror
 
