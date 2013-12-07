@@ -57,17 +57,24 @@ cm.addKeyMap(config.keymap.editor);
 
 // ## open file from command line
 
-var args = gui.App.argv;
+var args = gui.App.argv,
+    current = {};
 
 if (args.length) {
   var arg = args[0],
       start = arg[0] === '/' ? '' : process.env.PWD,
       path = start + '/' + arg,
-      content = fs.readFileSync(path, { encoding: 'utf8' }),
       mode = fsMode(path);
 
-  cm.setValue(content);
+  try {
+    var content = fs.readFileSync(path, { encoding: 'utf8' });
+    cm.setValue(content);
+  } catch (e) {
+    current.isNew = true;
+  }
+
   cm.setOption('mode', mode);
+  current.path = path;
 }
 
 // # plugins
@@ -80,7 +87,8 @@ var wed = {
   josh: shell,
   pathHandler: pathHandler,
   lib: lib,
-  config: config
+  config: config,
+  current: current
 };
 
 // ## init task plugins
