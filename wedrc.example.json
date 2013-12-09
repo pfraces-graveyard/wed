@@ -6,7 +6,8 @@
   ],
   "commands": [
     "open",
-    "save"
+    "save",
+    "cat"
   ],
   "keymap": {
     "editor": {

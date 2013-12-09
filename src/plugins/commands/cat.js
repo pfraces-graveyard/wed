@@ -1,22 +1,21 @@
 var fs = require('fs');
 
 module.exports = function (wed) {
-  var pathHandler = wed.pathHandler;
-
-  var completion = pathHandler.pathCompletionHandler,
-      root = process.env.PWD;
+  var completion = wed.pathHandler.pathCompletionHandler,
+      root = wed.root,
+      cwd = wed.cwd;
 
   return {
     cat: {
       exec: function (cmd, args, callback) {
-        var current = pathHandler.current.path,
-            pwd = root + current;
-
         var buffer = '';
 
         args.forEach(function (arg) {
-          var start = arg[0] === '/' ? root : pwd,
-              path = start + arg;
+          var path =  [
+            root(),
+            arg[0] === '/' ? '' : cwd(),
+            arg
+          ].join('');
 
           buffer += fs.readFileSync(path);
         });

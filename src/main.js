@@ -64,7 +64,7 @@ if (args.length) {
   var arg = args[0],
       start = arg[0] === '/' ? '' : process.env.PWD,
       path = start + '/' + arg,
-      mode = fsMode(path);
+      mode = fsMode(path) || {};
 
   try {
     var content = fs.readFileSync(path, { encoding: 'utf8' });

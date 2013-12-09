@@ -2,22 +2,23 @@ var fs = require('fs');
 
 module.exports = function (wed) {
   var cm = wed.codemirror,
-      pathHandler = wed.pathHandler,
+      completion = wed.pathHandler.pathCompletionHandler,
+      root = wed.root,
+      cwd = wed.cwd,
       fsMode = wed.lib.fs.mode;
-
-  var completion = pathHandler.pathCompletionHandler,
-      root = process.env.PWD;
 
   return {
     open: {
       exec: function (cmd, args, callback) {
-        var current = pathHandler.current.path,
-            pwd = root + current;
+        var arg = args[0];
 
-        var arg = args[0],
-            start = arg[0] === '/' ? root : pwd,
-            path = start + arg,
-            content = fs.readFileSync(path, { encoding: 'utf8' }),
+        path = [
+          root(),
+          arg[0] === '/' ? '' : cwd(),
+          arg
+        ].join('');
+        
+        var content = fs.readFileSync(path, { encoding: 'utf8' }),
             mode = fsMode(path) || {},
             modeConf = mode.mode,
             modeName = mode.name;

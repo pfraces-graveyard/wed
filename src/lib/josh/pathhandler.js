@@ -24,26 +24,6 @@ var Josh = Josh || {};
     shell.templates.not_found = _.template("<div><%=cmd%>: <%=path%>: No such file or directory</div>");
     shell.templates.ls = _.template("<div><% _.each(nodes, function(node) { %><span><%=node.name%>&nbsp;</span><% }); %></div>");
     shell.templates.pwd = _.template("<div><%=node.path %>&nbsp;</div>");
-      
-    var self = {
-      current: null,
-      pathCompletionHandler: pathCompletionHandler,
-      dirCompletionHandler: dirCompletionHandler
-    };
-
-    shell.setCommandHandler ("ls", {
-      exec: ls,
-      completion: pathCompletionHandler
-    });
-                  
-    shell.setCommandHandler ("pwd", {
-      exec: pwd
-    });
-                  
-    shell.setCommandHandler ("cd", {
-      exec: cd,
-      completion: dirCompletionHandler
-    });
     
     var createPathCompletionHandler = function (completeChildren) {
       return function (cmd, arg, line, callback) {
@@ -77,7 +57,15 @@ var Josh = Josh || {};
       };
     };
 
-    var pathFilter = function (children) {
+    var createChildrenCompletion = function (filterChildren) { 
+      return function (node, partial, callback) {
+        self.getChildNodes(node, function (childNodes) {
+          callback(shell.bestMatch(partial, filterChildren(childNodes)));
+        });
+      };
+    };
+
+    var getPaths = function (children) {
       return children.map(function (child) {
         var name = child.name;
 
@@ -89,22 +77,14 @@ var Josh = Josh || {};
       });
     };
 
-    var dirFilter = function (children) {
-      return pathFilter(children).filter(function (child) {
+    var getDirs = function (children) {
+      return getPaths(children.filter(function (child) {
         return child.isDirectory();
-      });
+      }));
     };
 
-    var createChildrenCompletion = function (childrenFilter) { 
-      return function (node, partial, callback) {
-        self.getChildNodes(node, function (childNodes) {
-          callback(shell.bestMatch(partial, childrenFilter));
-        });
-      };
-    };
-
-    var completePaths = createChildrenCompletion(pathFilter),
-        completeDirs = createChildrenCompletion(dirFilter);
+    var completePaths = createChildrenCompletion(getPaths),
+        completeDirs = createChildrenCompletion(getDirs);
 
     var pathCompletionHandler = createPathCompletionHandler(completePaths),
         dirCompletionHandler = createPathCompletionHandler(completeDirs);
@@ -147,6 +127,26 @@ var Josh = Josh || {};
       return self.getChildNodes(node, function (children) {
         callback(shell.templates.ls({ nodes: children }));
       });
+    };
+
+    shell.setCommandHandler ("ls", {
+      exec: ls,
+      completion: pathCompletionHandler
+    });
+                  
+    shell.setCommandHandler ("pwd", {
+      exec: pwd
+    });
+                  
+    shell.setCommandHandler ("cd", {
+      exec: cd,
+      completion: dirCompletionHandler
+    });
+      
+    var self = {
+      current: null,
+      pathCompletionHandler: pathCompletionHandler,
+      dirCompletionHandler: dirCompletionHandler
     };
 
     return self;
