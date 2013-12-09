@@ -10,11 +10,13 @@ module.exports = function (wed) {
       exec: function (cmd, args, callback) {
         var filePath = args[0],
             content = fs.readFileSync(filePath, { encoding: 'utf8' }),
-            mode = fsMode(filePath);
+            mode = fsMode(filePath),
+            modeConf = mode.mode,
+            modeName = mode.name;
 
         cm.setValue(content);
-        cm.setOption('mode', mode);
-        callback('mode ' + mode);
+        cm.setOption('mode', modeConf);
+        callback('mode ' + modeName);
       },
       completion: fsCompletion
     }
