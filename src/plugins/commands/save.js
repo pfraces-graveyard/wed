@@ -2,27 +2,28 @@ var fs = require('fs');
 
 module.exports = function (wed) {
   var cm = wed.codemirror,
-      pathHandler = wed.pathHandler,
-      currPath = wed.current.path || '';
-      
-  var completion = pathHandler.pathCompletionHandler,
-      root = process.env.PWD;
+      completion = wed.pathHandler.pathCompletionHandler,
+      curBufPath = wed.current.path || '',
+      root = wed.root,
+      cwd = wed.cwd;
 
   return {
     save: {
       exec: function (cmd, args, callback) {
-        var path,
-            content = cm.getValue();
+        var content = cm.getValue(),
+            path,
+            arg;
 
         if (!args.length) {
-          path = currPath;
+          path = curBufPath;
         } else {
-          var current = pathHandler.current.path,
-              pwd = root + current,
-              arg = args[0],
-              start = arg[0] === '/' ? root : pwd;
+          arg = args[0];
 
-          path = start + arg;
+          path = [
+            root(),
+            arg[0] === '/' ? '' : cwd(),
+            arg
+          ].join('');
         }
 
         if (!path) {

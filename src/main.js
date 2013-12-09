@@ -88,7 +88,21 @@ var wed = {
   pathHandler: pathHandler,
   lib: lib,
   config: config,
-  current: current
+  current: current,
+  root: (function () {
+    var logicalRoot = process.env.PWD;
+
+    return function (newRoot) {
+      if (newRoot) {
+        logicalRoot = newRoot;
+      }
+
+      return logicalRoot;
+    };
+  })(),
+  cwd: function () {
+    return pathHandler.current.path;
+  }
 };
 
 // ## init task plugins

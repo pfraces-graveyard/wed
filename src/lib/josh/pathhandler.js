@@ -15,105 +15,101 @@
  *-------------------------------------------------------------------------*/
 
 var Josh = Josh || {};
-(function(root, $, _) {
-  Josh.PathHandler = function(shell, config) {
+
+(function (root, $, _) {
+  Josh.PathHandler = function (shell, config) {
+    // not used yet
     config = config || {};
-    var _console = config.console || (Josh.Debug && root.console ? root.console : {
-      log: function() {
-      }
-    });
-    var _shell = shell;
-    _shell.templates.not_found = _.template("<div><%=cmd%>: <%=path%>: No such file or directory</div>");
-    _shell.templates.ls = _.template("<div><% _.each(nodes, function(node) { %><span><%=node.name%>&nbsp;</span><% }); %></div>");
-    _shell.templates.pwd = _.template("<div><%=node.path %>&nbsp;</div>");
-    var _original_default = _shell.getCommandHandler('_default');
+      
+    shell.templates.not_found = _.template("<div><%=cmd%>: <%=path%>: No such file or directory</div>");
+    shell.templates.ls = _.template("<div><% _.each(nodes, function(node) { %><span><%=node.name%>&nbsp;</span><% }); %></div>");
+    shell.templates.pwd = _.template("<div><%=node.path %>&nbsp;</div>");
+      
     var self = {
       current: null,
       pathCompletionHandler: pathCompletionHandler,
-      commandAndPathCompletionHandler: commandAndPathCompletionHandler,
-      getNode: function(path, callback) {
-        callback();
-      },
-      getChildNodes: function(node, callback) {
-        callback([]);
-      }
+      dirCompletionHandler: dirCompletionHandler
     };
 
-    _shell.setCommandHandler("ls", {
+    shell.setCommandHandler ("ls", {
       exec: ls,
       completion: pathCompletionHandler
     });
-    _shell.setCommandHandler("pwd", {
-      exec: pwd,
-      completion: pathCompletionHandler
+                  
+    shell.setCommandHandler ("pwd", {
+      exec: pwd
     });
-    _shell.setCommandHandler("cd", {
+                  
+    shell.setCommandHandler ("cd", {
       exec: cd,
-      completion: pathCompletionHandler
+      completion: dirCompletionHandler
     });
-    _shell.setCommandHandler("_default", {
-      exec: _original_default.exec,
-      completion: commandAndPathCompletionHandler
-    });
+    
+    var createPathCompletionHandler = function (completeChildren) {
+      return function (cmd, arg, line, callback) {
+        if (!arg) {
+          return completeChildren(self.current, '', callback);
+        }
+        
+        if (arg[arg.length - 1] === '/') {
+          return self.getNode(arg, function (node) {
+            if (!node) {
+              return callback();
+            }
+              
+            return completeChildren(node, '', callback);
+          });
+        }
+            
+        var lastPathSeparator = arg.lastIndexOf("/");
+        var parent = arg.substr(0, lastPathSeparator + 1);
+        var partial = arg.substr(lastPathSeparator + 1);
 
-    function commandAndPathCompletionHandler(cmd, arg, line, callback) {
-      _console.log("calling command and path completion handler w/ cmd: '"+cmd+"', arg: '"+arg+"'");
-      if(!arg) {
-        arg = cmd;
-      }
-      if(arg[0] == '.' || arg[0] == '/') {
-        return pathCompletionHandler(cmd, arg, line, callback);
-      }
-      return _original_default.completion(cmd, arg, line, callback);
-    }
-
-    function pathCompletionHandler(cmd, arg, line, callback) {
-      _console.log("completing '" + arg + "'");
-      if(!arg) {
-        _console.log("completing on current");
-        return completeChildren(self.current, '', callback);
-      }
-      if(arg[arg.length - 1] == '/') {
-        _console.log("completing children w/o partial");
-        return self.getNode(arg, function(node) {
+        return self.getNode(parent, function (node) {
           if(!node) {
-            _console.log("no node for path");
             return callback();
           }
-          return completeChildren(node, '', callback);
+            
+          return completeChildren(node, partial, function (completion) {
+            return callback(completion);
+          });
         });
-      }
-      var lastPathSeparator = arg.lastIndexOf("/");
-      var parent = arg.substr(0, lastPathSeparator + 1);
-      var partial = arg.substr(lastPathSeparator + 1);
+      };
+    };
 
-      _console.log("completing children via parent '" + parent+"'  w/ partial '"+partial+"'");
-      return self.getNode(parent, function(node) {
-        if(!node) {
-          _console.log("no node for parent path");
-          return callback();
+    var pathFilter = function (children) {
+      return children.map(function (child) {
+        var name = child.name;
+
+        if (child.isDirectory()) {
+          name += '/';
         }
-        return completeChildren(node, partial, function(completion) {
-          return callback(completion);
+
+        return name;
+      });
+    };
+
+    var dirFilter = function (children) {
+      return pathFilter(children).filter(function (child) {
+        return child.isDirectory();
+      });
+    };
+
+    var createChildrenCompletion = function (childrenFilter) { 
+      return function (node, partial, callback) {
+        self.getChildNodes(node, function (childNodes) {
+          callback(shell.bestMatch(partial, childrenFilter));
         });
-      });
-    }
+      };
+    };
 
-    function completeChildren(node, partial, callback) {
-      self.getChildNodes(node, function(childNodes) {
-        callback(_shell.bestMatch(partial, _.map(childNodes, function(x) {
-          var name = x.name;
+    var completePaths = createChildrenCompletion(pathFilter),
+        completeDirs = createChildrenCompletion(dirFilter);
 
-          if (x.isDirectory()) {
-            name += '/';
-          }
+    var pathCompletionHandler = createPathCompletionHandler(completePaths),
+        dirCompletionHandler = createPathCompletionHandler(completeDirs);
 
-          return name;
-        })));
-      });
-    }
-
-    function cd(cmd, args, callback) {
+    var cd = function (cmd, args, callback) {
       // when called without args redirect to root
       if (!(args && args.length)) {
         args = ['/'];
@@ -121,37 +117,37 @@ var Josh = Josh || {};
 
       self.getNode(args[0], function(node) {
         if(!node) {
-          return callback(_shell.templates.not_found({cmd: 'cd', path: args[0]}));
+          return callback(shell.templates.not_found({ cmd: 'cd', path: args[0] }));
         }
 
         self.current = node;
         return callback();
       });
-    }
+    };
 
-    function pwd(cmd, args, callback) {
-      callback(_shell.templates.pwd({node: self.current}));
-    }
+    var pwd = function (cmd, args, callback) {
+      callback(shell.templates.pwd({ node: self.current }));
+    };
 
-    function ls(cmd, args, callback) {
-      _console.log('ls');
+    var ls = function (cmd, args, callback) {
       if(!args || !args[0]) {
         return render_ls(self.current, self.current.path, callback);
       }
-      return self.getNode(args[0], function(node) {
+      
+      return self.getNode(args[0], function (node) {
         render_ls(node, args[0], callback);
       });
-    }
+    };
 
-    function render_ls(node, path, callback) {
+    var render_ls = function (node, path, callback) {
       if(!node) {
-        return callback(_shell.templates.not_found({cmd: 'ls', path: path}));
+        return callback(shell.templates.not_found({ cmd: 'ls', path: path }));
       }
-      return self.getChildNodes(node, function(children) {
-        _console.log("finish render: " + node.name);
-        callback(_shell.templates.ls({nodes: children}));
+        
+      return self.getChildNodes(node, function (children) {
+        callback(shell.templates.ls({ nodes: children }));
       });
-    }
+    };
 
     return self;
   };
