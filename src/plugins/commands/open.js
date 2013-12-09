@@ -18,7 +18,7 @@ module.exports = function (wed) {
             start = arg[0] === '/' ? root : pwd,
             path = start + arg,
             content = fs.readFileSync(path, { encoding: 'utf8' }),
-            mode = fsMode(filePath),
+            mode = fsMode(path) || {},
             modeConf = mode.mode,
             modeName = mode.name;
 
