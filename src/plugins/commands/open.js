@@ -18,11 +18,13 @@ module.exports = function (wed) {
             start = arg[0] === '/' ? root : pwd,
             path = start + arg,
             content = fs.readFileSync(path, { encoding: 'utf8' }),
-            mode = fsMode(path);
+            mode = fsMode(path) || {},
+            modeConf = mode.mode,
+            modeName = mode.name;
 
         cm.setValue(content);
-        cm.setOption('mode', mode);
-        callback('mode ' + mode);
+        cm.setOption('mode', modeConf);
+        callback('mode ' + modeName);
       },
       completion: completion
     }

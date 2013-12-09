@@ -10,8 +10,8 @@
   ],
   "keymap": {
     "editor": {
-      "Esc": "toggleShell",
       "Tab": "tabsToSpaces",
+      "Esc": "toggleShell",
       "F12": "debug"
     },
     "shell": {

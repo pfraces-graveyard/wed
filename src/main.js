@@ -73,7 +73,7 @@ if (args.length) {
     current.isNew = true;
   }
 
-  cm.setOption('mode', mode);
+  cm.setOption('mode', mode.mode);
   current.path = path;
 }
 
