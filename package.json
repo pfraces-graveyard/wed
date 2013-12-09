@@ -1,10 +1,11 @@
 {
   "name": "wed",
   "description": "web editor",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "dependencies": {
     "rc": "latest",
-    "u.mix": "latest"
+    "u.mix": "latest",
+    "async": "latest"
   },
   "private": "true",
   "main": "src/index.html",

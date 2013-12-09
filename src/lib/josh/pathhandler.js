@@ -26,7 +26,6 @@ var Josh = Josh || {};
     _shell.templates.not_found = _.template("<div><%=cmd%>: <%=path%>: No such file or directory</div>");
     _shell.templates.ls = _.template("<div><% _.each(nodes, function(node) { %><span><%=node.name%>&nbsp;</span><% }); %></div>");
     _shell.templates.pwd = _.template("<div><%=node.path %>&nbsp;</div>");
-    _shell.templates.prompt = _.template("<%= node.path %> $");
     var _original_default = _shell.getCommandHandler('_default');
     var self = {
       current: null,
@@ -37,9 +36,6 @@ var Josh = Josh || {};
       },
       getChildNodes: function(node, callback) {
         callback([]);
-      },
-      getPrompt: function() {
-        return _shell.templates.prompt({node: self.current});
       }
     };
 
@@ -58,9 +54,6 @@ var Josh = Josh || {};
     _shell.setCommandHandler("_default", {
       exec: _original_default.exec,
       completion: commandAndPathCompletionHandler
-    });
-    _shell.onNewPrompt(function(callback) {
-      callback(self.getPrompt());
     });
 
     function commandAndPathCompletionHandler(cmd, arg, line, callback) {
@@ -111,7 +104,7 @@ var Josh = Josh || {};
         callback(_shell.bestMatch(partial, _.map(childNodes, function(x) {
           var name = x.name;
 
-          if (x.children.length) {
+          if (x.isDirectory()) {
             name += '/';
           }
 
@@ -121,10 +114,16 @@ var Josh = Josh || {};
     }
 
     function cd(cmd, args, callback) {
+      // when called without args redirect to root
+      if (!(args && args.length)) {
+        args = ['/'];
+      }
+
       self.getNode(args[0], function(node) {
         if(!node) {
           return callback(_shell.templates.not_found({cmd: 'cd', path: args[0]}));
         }
+
         self.current = node;
         return callback();
       });

@@ -12,14 +12,40 @@ An editor for web developers
     cd wed
     npm install
     bower install
-    ln -s bower_components src/vendor
-    ln -s start.sh ~/bin/wed
 
-# Usage
+Link your `bower_components` directory to `src/vendor`
+
+    ln -s bower_components src/vendor
+
+If the previous doesn't work in your system, copy the components
+
+    cp -R bower_components src/vendor
+
+Keep in mind to do this copy again if you update with `bower update`
+
+# Launching the app
 
 From `wed/` folder
 
     nw .
+
+A start script is also provided. You can call it from everywhere by
+linking it to some path in `$PATH`
+
+    ln -s /path/to/wed/start.sh ~/bin/wed
+
+In the previous example we have renamed the start script to `wed`
+
+Called without paramenters, `wed` launches the editor detached from the
+console and supressing node-webkit's outuput
+
+    cd /path/to/a/project
+    wed
+
+A debug flag is supported which keeps the editor attached to the
+console and shows the node-webkit's output
+
+    wed --debug
 
 # Config
 
@@ -95,6 +121,8 @@ A collection of named keymaps each being a map of
 
 This keymap is enabled by default
 
+[builtin CodeMirror keymap][11]
+
 #### `keymap.shell`
 
 ```json
@@ -107,8 +135,8 @@ This keymap is enabled by default
 }
 ```
 
-This keymap is enabled when the shell is open and prevents key events
-from being captured by the editor
+This keymap is enabled when the shell is open and disables the editor
+keymap
 
 ### `editor`
 
@@ -121,7 +149,7 @@ from being captured by the editor
 }
 ```
 
-Pass configuration directly to the editor
+[Pass configuration directly to CodeMirror][9]
 
 # Plugins
 
@@ -137,6 +165,14 @@ Allowing for a full customization of the user environment
 
 CodeMirror commands, shared between all CodeMirror instances
 
+>   The values of properties in keymaps can be either functions of a
+    single argument (the CodeMirror instance), strings, or false. Such
+    strings refer to properties of the CodeMirror.commands object, which
+    defines a number of common commands that are used by the default
+    keybindings, and maps them to functions.
+
+[CodeMirror manual][10]
+
 ### Builtin
 
 #### `tabsToSpaces`
@@ -150,6 +186,8 @@ Shows or hides the shell
 ## Command plugins
 
 Josh commands
+
+[In the Josh hello world exmple][12] its explained how to define commands
 
 ### Builtin
 
@@ -248,3 +286,7 @@ module.exports = function (wed) {
 [6]: https://github.com/pfraces/wed/issues/13
 [7]: http://codemirror.net/mode/htmlmixed/index.html
 [8]: http://codemirror.net/demo/changemode.html
+[9]: http://codemirror.net/doc/manual.html#config
+[10]: http://codemirror.net/doc/manual.html
+[11]: https://github.com/marijnh/CodeMirror/blob/master/lib/codemirror.js#L3560
+[12]: http://sdether.github.io/josh.js/helloworld.html
