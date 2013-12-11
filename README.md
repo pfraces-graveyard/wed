@@ -9,32 +9,14 @@ An editor for web developers
 # Install
 
     git clone https://github.com/pfraces/wed
+
+A start script called `wed` is provided. In order to use it from
+everywhere you must use the tools offered by your system.
+
     cd wed
-    npm install
-    bower install
-
-Link your `bower_components` directory to `src/vendor`
-
-    ln -s bower_components src/vendor
-
-If the previous doesn't work in your system, copy the components
-
-    cp -R bower_components src/vendor
-
-Keep in mind to do this copy again if you update with `bower update`
+    ln -s $(pwd)/wed ~/bin
 
 # Launching the app
-
-From `wed/` folder
-
-    nw .
-
-A start script is also provided. You can call it from everywhere by
-linking it to some path in `$PATH`
-
-    ln -s /path/to/wed/start.sh ~/bin/wed
-
-In the previous example we have renamed the start script to `wed`
 
 Called without paramenters, `wed` launches the editor detached from the
 console and supressing node-webkit's outuput

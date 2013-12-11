@@ -66,12 +66,14 @@ if (args.length) {
       path = start + '/' + arg,
       mode = fsMode(path) || {};
 
-  try {
-    var content = fs.readFileSync(path, { encoding: 'utf8' });
-    cm.setValue(content);
-  } catch (e) {
-    current.isNew = true;
-  }
+  fs.readFile(path, { encoding: 'utf-8' }, function (err, data) {
+    if (err) {
+      current.isNew = true;
+      return;
+    }
+      
+    cm.replaceRange(data, CodeMirror.Pos(cm.lastLine()));
+  });
 
   cm.setOption('mode', mode.mode);
   current.path = path;
